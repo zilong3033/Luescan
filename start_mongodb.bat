@@ -1,0 +1,1 @@
+mongod --dbpath="D:\Program Files (x86)\Mongodb\DBData" --port=27017

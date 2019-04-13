@@ -1,0 +1,13 @@
+#header{
+   width: 1347px;
+   border: 1px solid;
+   }
+#title{
+    font-size: 32px;
+    height: 57px;
+}
+#logout{
+    margin-top:-25px;
+    margin-right: 10px;
+    float: right;
+}

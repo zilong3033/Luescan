@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luescan 漏洞扫描系统</title>
+
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+	<script src="static/js/listtasks.js"></script>
+    <style>
+        #body{
+            display:flex;
+            height：400px;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+            background-color:#eeeeee;
+        }
+        #header{
+            border-bottom:1px solid;
+        }
+        #title{
+            text-align:center;
+            margin: 0px;
+            padding: 10px;
+        }
+        #menu{
+            text-align:center;
+            margin-top:5px;
+            padding-top:22px;
+        }
+        #center{
+            flex:3;
+            height:100;
+            display:flex;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+        }
+        #left{
+            flex:1;
+            border-right:1px solid;
+        }
+        #rtasks{
+            flex:1;
+            margin-top:8px;
+            height: 615px;
+        }
+        #ltasks{
+            flex:1;
+            text-align:center;
+        }
+        #plugins_list{
+            background-color: #fff;
+            height: 250px;
+            margin-top: 25px;
+            margin-left: 125px;
+            margin-right:125px;
+            overflow:auto;
+            text-align: left;
+        }
+        #addsource{
+            margin-top: 35px;
+        }
+        #show_tasks{
+            margin-right: 40px;
+        }
+        #tasklist{
+            width:460px;
+            text-align:center;
+        }
+        #tasksname{
+            text-align:center;
+        }
+        #status{
+        }
+        #logout{
+            margin-top:10px;
+            margin-right: 10px;
+            float: right;
+        }
+        #title{
+            text-align:center;
+            margin: 0px;
+            padding: 10px;
+        }
+        #plugins_manage{
+            text-align:center;
+            padding-top: 70px;
+        }
+        #pluginslist{
+            width: 300px;
+            height: 170px;
+            margin-left: 15px;
+            padding-top:20px;
+        }
+        #deleteplugins{
+            margin-left: 25px;
+            background-color: #fff;
+        }
+        #delpgs_submit{
+            margin-left: 25px;
+        }
+        #source_add{
+            width: 400px;
+            padding-left: 94px;
+        }
+        #source_add #input1{
+            width: 160px;
+            margin-left: 74px;
+            text-align: center;
+        }
+        #plugins_upload{
+            padding-top: 0px;
+        }
+        #plugins_upload input{
+            margin-left: 42px;
+        }
+        #btntaskps{
+            margin-top: 10px;
+        }
+        #tasksps{
+            margin-left: 15px;
+        }
+        #form_plugins{
+            padding-left: 150px;
+            text-align: left;
+            padding-right: 150px;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="header"><div id="logout"><button class="btn btn-primary btn-xs" onclick="/logout">退出&nbsp<span class="glyphicon glyphicon-off"></span></button></div><div id="title" class="jumbotron"><h2>Luescan漏洞扫描系统</h2><p>这是一个，web 安全漏洞扫描系统，欢迎！</p></div></div>
+<div id="body">
+    <div id="left">
+        <div id="menu">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/">首页</a></li>
+                <li class="active"><a href="/pluginscan">插件扫描</a></li>
+                <li><a href="/crawlscan">爬虫扫描</a></li>
+            </ul>
+        </div>
+        <div id="plugins_manage">
+            <p>插件管理</p>
+            <div id="pluginslist">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    插件管理
+                </button>
+                <!-- 模态框（Modal） -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    插件管理
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="form_plugins">
+                                    <form id="deleteplugins">
+                                        {% for p in plugins_list%}
+                                            <input type="checkbox" name="{{p.name}}" value="{{p.name}}">{{p.name}}<br>
+                                        {% endfor %}
+                                        <br>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                </button>
+                                <button type="button" class="btn btn-primary" id="delpgs_submit">
+                                    删除
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal -->
+                </div>
+            </div>
+            <!--<iframe width="300px" height="250px" src="/pluginslist"></iframe>!-->
+            <div id="plugins_upload">
+                <p>插件上传</p>
+                <input type="file" name="file" id="pluginsfile"><br>
+                <button id="uploadplugin" class="btn btn-primary">插件上传</button>
+            </div>
+        </div>
+    </div>
+<div id="center">
+    <div id="ltasks">
+        <div id="addsource">
+        <from>
+            <input type="radio" id="urls" name="source_type" checked="checked" value="urls">urls
+            <input type="radio" id="hosts" name="source_type" value="hosts">hosts<br><br>
+            <div id="source_add">
+             <label for="name">任务名</label><input  id="input1" type="text" name="tasksname" placeholder="taskname" class="form-control">
+                <label for="name">目标</label><textarea rows="4" cols="27" name="source" id="source" placeholder="输入格式:(127.0.0.1;http://zilong3033.cn)" class="form-control"></textarea></div>
+        </from>
+            <div id="plugins_list"></div>
+            <button id='btntasksps' class="btn btn-primary">提交</button>
+        </div>
+    </div>
+    <div id="rtasks">
+        <div id="tasksname"><p>任务列表</p></div>
+        <div id="show_tasks">
+            <div id="status_table">
+                <div id="status"></div>
+            </div>
+            <div id="tasklist_table">
+                    <div id="tasklist"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

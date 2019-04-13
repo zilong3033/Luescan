@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luescan 漏洞扫描系统</title>
+
+    <style>
+        #body{
+            display:flex;
+            height：400px;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+            background-color:#eeeeee;
+        }
+        #header{
+            border-bottom:1px solid;
+        }
+        #menu{
+            text-align:center;
+            margin-top:5px;
+            padding-top:22px;
+        }
+        #center{
+            flex:3;
+            height:100;
+            display:flex;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+        }
+        #ltasks{
+            flex: 1;
+        }
+        #left{
+            flex:1;
+            border-right:1px solid;
+        }
+        #tials{
+            text-align: center;
+            border: 1px solid;
+            margin-left: 125px;
+            margin-right: 125px;
+        }
+        #tials p{
+            margin-top:12px;
+            margin-bottom:12px;
+        }
+        #tials_name{
+            text-align:center;
+            margin-top: 25px;
+        }
+        #piechart{
+            border: 1px solid;
+        }
+        #piechartname1{
+            text-align: center;
+            margin-top: 32px;
+        }
+        #piechartname2{
+            text-align: center;
+        }
+        #piechartname p{
+            margin: 2px;
+        }
+        #rtasks{
+            flex:1;
+            margin: 10px;
+            margin-top: 10px;
+            margin-right: 35px;
+            text-align: center;
+            display:flex;
+            flex-direction:column;
+        }
+        #rttasks{
+            height:300px;
+        }
+        #rbtasks{
+            height:300px;
+        }
+        #tasks{
+            border:1px solid;
+        }
+        #task{
+            border: 1px solid;
+            margin: 3px;
+            height: 28px;
+        }
+        A { text-decoration: none}
+        #update{
+            text-align:center;
+            margin-top:180px;
+        }
+        #logout{
+            margin-top:10px;
+            margin-right: 10px;
+            float: right;
+        }
+        #title{
+            text-align:center;
+            margin: 0px;
+            padding: 10px;
+        }
+    </style>
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+	<script src="static/js/action.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+    </script>
+</head>
+<body style="">
+<div id="header"><div id="logout"><button class="btn btn-primary btn-xs" onclick="javascript:logout()">退出&nbsp<span class="glyphicon glyphicon-off"></span></button></div><div id="title" class="jumbotron"><h2>Luescan漏洞扫描系统</h2><p>这是一个，web 安全漏洞扫描系统，欢迎！</p></div></div>
+<div id="body">
+    <div id="left">
+        <div id="menu">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="/">首页</a></li>
+                <li><a href="/pluginscan">插件扫描</a></li>
+                <li><a href="/crawlscan">爬虫扫描</a></li>
+            </ul>
+        </div>
+        <div id="update">
+            <div id="update_check">
+                <p>可用更新插件更新:</p>
+                <p id="plugin_update_check">need_update_num</p>
+                <button id="update_plugins" class="btn btn-primary">插件更新</button>
+                <button id="update_payload" class="btn btn-primary">payload更新</button>
+            </div>
+        </div>
+    </div>
+    <div id="center">
+        <div id="ltasks">
+            <div id="tials_name"><p style="width: 64px;margin-left: 200px;">系统信息</p>
+                <div id="tials">
+                    <p>官方插件数：{{opn}}</p>
+                    <p>自定义插件数:{{cpn}}</p>
+                    <p>插件更新时间：{{update_time}}</p>
+                    <p>任务总数:{{tn}}</p>
+                    <p>正在运行的任务数:{{trn}}</p>
+                </div>
+            </div>
+            <div id="piechartname1">
+                <p style="margin-top: 12px;">Top 5漏洞统计</p>
+                <iframe width="450" height="320" src="/panalysis" style="border:0px"></iframe>
+            </div>
+        </div>
+
+        <div id="rtasks">
+            <div id="rttasks">
+                    <table class="table table-condensed table-hover">
+                        <caption style="text-align:center">插件近期任务列表</caption>
+                        <thead>
+                            <tr>
+                                <th style=" text-align:center">任务号</th>
+                                <th style=" text-align:center">任务名称</th>
+                                <th style=" text-align:center">时间</th>
+                                <th style=" text-align:center" colspan="2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for t in l_tasks%}
+                            <tr>
+                                <td>{{t.tasksid}}</td>
+                                <td style="width: 220px"><a href="/presultlist/{{t.tasksid}}">{{t.tasksname}}</td>
+                                <td>{{t.add_time.strftime("%m-%d %H:%M")}}</td>
+                                <td style="width: 10px"><button class="btn btn-primary btn-xs" onclick="javascript:delpgstask({{t.tasksid}})"><span class="glyphicon glyphicon-remove"></span></button></td>
+                                <td style="width: 10px"><button class="btn btn-primary btn-xs" onclick="javascript:rerunptask({{t.tasksid}})"><span class="glyphicon glyphicon-refresh"></span></button></td>
+                            </tr>
+                        {%endfor%}
+                        </tbody>
+	                 </table>
+            </div>
+            <div id="rbtasks">
+                 <table class="table table-condensed table-hover">
+                        <caption style="text-align:center">爬虫近期任务列表</caption>
+                        <thead>
+                            <tr>
+                                <th style=" text-align:center">任务号</th>
+                                <th style=" text-align:center">任务名称</th>
+                                <th style=" text-align:center">时间</th>
+                                <th style=" text-align:center" colspan="2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for t in c_tasks%}
+                            <tr>
+                                <td>{{t.tasksid}}</td>
+                                <td style="width: 220px"><a href="/cresultlist/{{t.tasksid}}">{{t.tasksname}}</td>
+                                <td>{{t.add_time.strftime("%m-%d %H:%M")}}</td>
+                                <td style="width: 10px"><button class="btn btn-primary btn-xs" onclick="javascript:delclrtask({{t.tasksid}})"><span class="glyphicon glyphicon-remove"></span></button></td>
+                                <td style="width: 10px"><button class="btn btn-primary btn-xs" onclick="javascript:rerunctask({{t.tasksid}})"><span class="glyphicon glyphicon-refresh"></span></button></td>
+                            </tr>
+                        {%endfor%}
+                        </tbody>
+	                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

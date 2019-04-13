@@ -1,0 +1,65 @@
+ #menu{
+            text-align:center;
+            margin-top:15px;
+        }
+        #center{
+            flex:3;
+            height:100;
+            display:flex;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+        }
+        #ltasks{
+            flex: 1;
+        }
+        #left{
+            flex:1;
+            height: 100;
+            border:1px solid;
+        }
+        #tials{
+            text-align: center;
+            border: 1.5px solid;
+            margin-left: 125px;
+            margin-right: 125px;
+        }
+        #tials p{
+            margin-top:12px;
+            margin-bottom:12px;
+        }
+        #tials_name{
+            text-align:center;
+        }
+        #piechart{
+            border: 1.5px solid;
+        }
+        #piechartname{
+            text-align: center;
+        }
+        #piechartname p{
+            margin: 2px;
+        }
+        #rtasks{
+            flex:1;
+            margin: 10px;
+            margin-top: 10px;
+            margin-right: 35px;
+        }
+        #tasks{
+            border:1px solid;
+        }
+        #task{
+            border: 1px solid;
+            margin: 3px;
+            height: 28px;
+        }
+        #rtasks_name{
+            height: 25px;
+            text-align: center;
+        }
+        A { text-decoration: none}
+        #update{
+            text-align:center;
+            margin-top:320px;
+        }

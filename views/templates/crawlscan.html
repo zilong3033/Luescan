@@ -1,0 +1,183 @@
+{% extends "header.html" %}
+{% block content %}
+<div id="body">
+    <div id="left">
+        <div id="menu">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/">首页</a></li>
+                <li><a href="/pluginscan">插件扫描</a></li>
+                <li class="active"><a href="/crawlscan">爬虫扫描</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="center">
+        <div id="ttasks">
+            <div id="lttasks">
+                <div id="addsource">
+                    <div id="addsource_name"><p>添加扫描任务</p></div>
+                    <div id="addsource_content">
+                        <form action="clraddtasks" method="post">
+                            <label for="name">任务名</label><input  id="input1" type="text" name="tasksname" placeholder="taskname" class="form-control">
+                            <label for="name">目标</label><textarea rows="4" cols="27" name="source" id="source" placeholder="输入格式:(http://baidu.com;http://zilong3033.cn)" class="form-control"></textarea>
+                            <button type="submit" class="btn btn-default">提交</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="rttasks">
+                <div id="tasks">
+                </div>
+            </div>
+        </div>
+        <div id="btasks">
+            <div id="status">
+                <div id="status_v">
+                    <div class="panel panel-default" style="background-color:#eee">
+                        <table class="table table-condensed table-hover">
+                                <caption style="text-align:center">正在进行的任务</caption>
+                                <thead>
+                                    <tr>
+                                        <th style=" text-align:center;width: 50px;">展开</th>
+                                        <th style=" text-align:center;width: 100px;">任务号</th>
+                                        <th style=" text-align:center;width: 160px;">任务名称</th>
+                                        <th style=" text-align:center;width: 458px;">进度</th>
+                                        <th style=" text-align:center;width: 102px;">时间</th>
+                                        <th style=" text-align:center" colspan="2">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for i in tasks_run%}
+                                    <tr style="text-align: center;">
+                                        <td>
+                                            <div class="panel-heading" style="padding:0px">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{tasks_run[i].tasksid}}">+</a>
+                                            </div>
+                                        </td>
+                                        <td>{{tasks_run[i].tasksid}}</td>
+                                        <td>{{tasks_run[i].tasksname}}</td>
+                                        <td style="white-space: nowrap;position: relative;"><div class="progress progress-striped active" style="margin: 0px;width: 440px;display: inline-block;"><div id={{tasks_run[i].tasksid}} class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"><span class="sr-only">90% 完成（成功）</span></div></div><div id="{{tasks_run[i].tasksid}}show" style="display: inline-block;position: absolute;right: -2%;"></div></td>
+                                        <td>{{tasks_run[i].add_time.strftime("%m-%d %H:%M")}}</td>
+                                        <td style="width: 10px"><button class="btn btn-primary btn-xs" onclick="javascript:stopclrtask({{tasks_run[i].tasksid}})"><span class="glyphicon glyphicon-play"></span></button></td>
+                                        <td style="width: 10px"><button class="btn btn-primary btn-xs" onclick="javascript:delclrtask({{tasks_run[i].tasksid}})"><span class="glyphicon glyphicon-remove"></span></button></td>
+                                    </tr>
+                                    <tr>
+                                            <td colspan="6" style="padding:0px">
+                                                <div id="collapse{{tasks_run[i].tasksid}}" class="panel-collapse collapse in">
+                                                    <div class="panel-body">
+                                                        <div>目标：
+                                                            {% for url in tasks_run[i].urls%}
+                                                                {{url}}&nbsp&nbsp
+                                                            {%endfor%}
+                                                        </div>
+                                                        <div id="mgs{{tasks_run[i].tasksid}}"></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                {%endfor%}
+                                </tbody>
+                             </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        #body{
+            display:flex;
+            height：400px;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+            background-color:#eeeeee;
+        }
+        #left{
+            flex:1;
+            border-right:1px solid;
+            height: 533px;
+        }
+        #menu{
+            text-align:center;
+            margin-top:5px;
+            padding-top:22px;
+        }
+        #center{
+            flex:3;
+            display:flex;
+            flex-direction:column;
+        }
+        #ttasks{
+            /*border:1px solid;*/
+            display:flex;
+            flex-direction:row;
+            height: 300px;
+        }
+        #lttasks{
+            flex:1.5;
+            /*border:1px solid;*/
+            text-align: center;
+        }
+        #rttasks{
+            flex:2;
+            /*border:1px solid;*/
+
+        }
+        #addsource #addsource_name{
+            padding-top: 15px;
+        }
+        #addsource #addsource_content{
+            padding-left: 65px;
+            padding-right: 65px;
+        }
+        #addsource #addsource_content #input1{
+            width: 200px;
+            margin-left: 54px;
+            text-align: center;
+        }
+        #addsource #addsource_content button{
+            margin-top:10px;
+        }
+        #btasks{
+            /*border:1px solid;*/
+            height: 500px;
+            padding-left:10px;
+            padding-right:10px;
+        }
+        #atasksrun{
+            color:#000;
+        }
+        #atasksrun:hover{
+            text-decoration:none;
+        }
+    </style>
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+	<script src="static/js/clrtasks.js"></script>
+    <script>
+        tasksidlist=[{% for i in tasks_run%}{{tasks_run[i].tasksid}},{%endfor%}];
+        function getps(tasksid){
+            url="/getps/"+tasksid
+            $.get(url,function(data,status){
+                if(data=="finish"){
+                    location.reload();
+                }
+                else{
+                    $('#'+tasksid).attr("style","width:"+data["p"]+";");
+                    $('#mgs'+tasksid).html(data["show_mgs"]);
+                    $('#'+tasksid+'show').html(data["p"])
+                }
+            });
+        }
+        function ps(){
+            if(tasksidlist.length>0){
+                for(var i in tasksidlist){
+                    getps(tasksidlist[i])
+                }
+            }
+        }
+        ps();
+        setInterval(ps,1000);
+    </script>
+</div>
+</body>
+</html>
+{% endblock %}

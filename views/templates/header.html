@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luescan 漏洞扫描系统</title>
+
+    <style>
+        #header{
+            border-bottom:1px solid;
+        }
+        A { text-decoration: none}
+        #logout{
+            margin-top:10px;
+            margin-right: 10px;
+            float: right;
+        }
+        #title{
+            text-align:center;
+            margin: 0px;
+            padding: 10px;
+        }
+    </style>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+    </script>
+</head>
+<body style="">
+<div id="header"><div id="logout"><button class="btn btn-primary btn-xs" onclick="/logout">退出&nbsp<span class="glyphicon glyphicon-off"></span></button></div><div id="title" class="jumbotron"><h2>Luescan漏洞扫描系统</h2><p>这是一个，web 安全漏洞扫描系统，欢迎！</p></div></div>
+{% block content %}{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "header.html" %}
+{% block content %}
+<div id="body">
+    <div id="left">
+        <div id="menu">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/">首页</a></li>
+                <li><a href="/pluginscan">插件扫描</a></li>
+                <li><a href="/crawlscan">爬虫扫描</a></li>
+                <li class="active"><a href="#">扫描结果</a></li>
+            </ul>
+        </div>
+    </div>
+<div id="center">
+        <div id="results-task" style="with:800px">
+            <div id="show_result">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="text-align:center"><h4>{{tasks.tasksid}}&nbsp&nbsp{{tasks.tasksname}}&nbsp&nbsp{{tasks.add_time.strftime("%Y-%m-%d %H:%M:%S")}}</h4></div>
+                    {%if not ps%}
+                    <table class="table table-bordered" style="table-layout: fixed;">
+                        {% for l in cresult_l%}
+                            <tr><td colspan="3"><button onclick="delcr({{cresult_l[l]['results_id']}})" class="btn btn-primary">删除{{cresult_l[l]["results_id"]}}号扫描结果</button></td></tr>
+                            <tr><td>结果号:{{cresult_l[l]["results_id"]}}</td><td>开始时间:{{cresult_l[l]["start_time"].strftime("%Y-%m-%d %H:%M")}}</td><td>结束时间:{{cresult_l[l]["end_time"].strftime("%Y-%m-%d %H:%M")}}</td></tr>
+                            {%for i in cresults%}
+                                {%if cresults[i]["results_id"]==cresult_l[l]["results_id"]%}
+                                    {% if cresults[i]["vul"]%}
+                        <tr><td>风险地址：{{cresults[i]["c_url"]}}</td><td>漏洞名称:{{cresults[i]["vul"]}}</td><td>风险程度:{{cresults[i]["level"]}}</td></tr>
+                                        <tr><td colspan="3" style="word-break:break-all">漏洞详情:{{cresults[i]["result"]}}</td></tr>
+                                        <tr><td style="word-break:break-all" colspan="3">漏洞修复建议：{{cresults[i]["fix"]}}</td></tr>
+                                        <tr><td colspan="3">站点地址:{{cresults[i]["url"]}}</td></tr>
+                                    {% endif %}
+                                {%endif%}
+                            {%endfor%}
+                            <tr><td colspan="3">-------------------------------------------------------------</td></tr>
+                        {% endfor%}
+                    </table>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+</div>
+<style>
+    #center{
+        flex:3;
+        height:100;
+    }
+    #results{
+        margin-top:10px;
+        text-align:center;
+    }
+    #results-task{
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 50px;
+        text-align:center;
+    }
+    #result{
+        border:1px solid;
+        margin-top: 12px;
+        width: 548px;
+        margin-left: 90px;
+    }
+    #body{
+            display:flex;
+            height：400px;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+            background-color:#eeeeee;
+        }
+        #left{
+            flex:1;
+            border-right:1px solid;
+            height: 533px;
+        }
+        #menu{
+            text-align:center;
+            margin-top:5px;
+            padding-top:22px;
+        }
+        #results-name{
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 12px;
+        }
+
+</style>
+    <script>
+        function delcr(id){
+            url="/delcresult/"+id
+            $.get(url,function(data,status){
+                alert(data);
+                location.reload();
+            });
+        }
+    </script>
+</div>
+</body>
+</html>{% endblock %}

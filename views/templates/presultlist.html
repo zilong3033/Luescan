@@ -1,0 +1,120 @@
+{% extends "header.html" %}
+{% block content %}
+<div id="body">
+    <div id="left">
+        <div id="menu">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="/">首页</a></li>
+                <li><a href="/pluginscan">插件扫描</a></li>
+                <li class="active"><a href="#">扫描结果</a></li>
+                <li><a href="/">爬虫扫描</a></li>
+            </ul>
+        </div>
+    </div>
+<div id="center">
+        <div id="results-task">
+            <div id="results-name">{{tasks.tasksid}}&nbsp&nbsp{{tasks.tasksname}}&nbsp&nbsp{{tasks.add_time.strftime("%Y-%m-%d %H:%M:%S")}}&nbsp&nbsp<a href="javascript:delpr({{tasks.tasksid}})">删除扫描结果</a></div>
+            <div class="panel panel-default" style="background-color:#eee">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">展开</th>
+                            <th style="text-align:center">漏洞类型</th>
+                            <th style="text-align:center">数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if results %}
+                        {% for re in results %}
+                            {% for vul in re["results"]%}
+                                <tr>
+                                    <td>
+                                        <div class="panel-heading" style="padding:0px">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#{{re['_id']}}{{vul|mdfive}}">+</a>
+                                        </div>
+                                    </td>
+                                    <td>{{vul}}</td>
+                                    <td>{{re["results"][vul]|lgth}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="padding:0px">
+                                        <div id="{{re['_id']}}{{vul|mdfive}}" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                {% for r in re["results"][vul]%}
+                                                    <div><br>
+                                                        <p>地址:{{r|debase64}}&nbsp&nbsp&nbsp&nbsp扫描结果:{{re["results"][vul][r]}}</p>
+                                                    </div>
+                                                {%endfor%}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                            <tr>
+                                <td colspan="3">此次扫描时间:{{re.start_time.strftime("%Y-%m-%d %H:%M")}}</td>
+                            </tr>
+                        {%endfor%}
+                    {%endif%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+<style>
+    #center{
+        flex:3;
+        height:100;
+    }
+    #results{
+        margin-top:10px;
+        text-align:center;
+    }
+    #results-task{
+        padding-left: 200px;
+        padding-right: 200px;
+        padding-top: 50px;
+        text-align:center;
+    }
+    #result{
+        border:1px solid;
+        margin-top: 12px;
+        width: 548px;
+        margin-left: 90px;
+    }
+    #body{
+            display:flex;
+            height：400px;
+            flex-direction：row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+            background-color:#eeeeee;
+        }
+        #left{
+            flex:1;
+            border-right:1px solid;
+            height: 533px;
+        }
+        #menu{
+            text-align:center;
+            margin-top:5px;
+            padding-top:22px;
+        }
+        #results-name{
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 12px;
+        }
+
+</style>
+    <script>
+        function delpr(id){
+            url="/delpresult/"+id
+            $.get(url,function(data,status){
+                alert(data);
+                location.reload();
+            })
+        }
+    </script>
+</div>
+</body>
+</html>{% endblock %}

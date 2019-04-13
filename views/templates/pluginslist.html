@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luescan 漏洞扫描系统</title>
+
+    	<script src="static/js/jquery-3.3.1.min.js"></script>
+	<script src="static/js/plugins.js"></script>
+</head>
+<body>
+<form id="deleteplugins">
+    {% for p in plugins_list%}
+    <input type="checkbox" name="{{p.name}}" value="{{p.name}}">{{p.name}}<br>
+{% endfor %}
+    <br>
+</form>
+<button id="delpgs_submit">删除</button>
+</body>
+</html>

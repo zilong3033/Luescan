@@ -1,0 +1,14 @@
+$(document).ready(function(){
+    $('#delpgs_submit').click(function(){
+        delplist=$('#deleteplugins').serializeArray();
+        delpdct=JSON.stringify(delplist);
+        console.log(delpdct);
+        $.post("/deleteplugins",{
+            delplist:delpdct
+        },
+        function(data,status){
+            alert(data);
+            location.reload();
+        });
+    });
+});
