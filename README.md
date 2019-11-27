@@ -1,5 +1,6 @@
 # Luescan
 Luescan is Web vulnerability scanner
+LueScan 是一个基于web的插件化漏洞扫描工具
 
 
 ### 一. 设计初期思路
